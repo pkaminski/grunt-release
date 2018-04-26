@@ -322,11 +322,13 @@ module.exports = function(grunt) {
                     for (var i = 0; i < tasks.length; i++) {
                         for (var i = 0; i < tasks.length; i++) {
                         	if(typeof tasks[i] === 'string' || !tasks[i].preserveFlags){
-                            	msg = '-> ' + tasks[i] + (flags.length ? ' (ignoring current flags)' : '');
-                                promises.push(run('grunt ' + tasks[i], msg));
+                              var task = grunt.template.process(tasks[i].name || tasks[i], templateOptions);
+                              msg = '-> ' + task + (flags.length ? ' (ignoring current flags)' : '');
+                              promises.push(run('grunt ' + task, msg));
                             }
                             else if (tasks[i].preserveFlags){
-                            	promises.push(run('grunt ' + tasks[i].name + ' ' + flags, '-> ' + tasks[i].name + ' ' + flags));
+                                var task = grunt.template.process(tasks[i].name, templateOptions);
+                                promises.push(run('grunt ' + task + ' ' + flags, '-> ' + task + ' ' + flags));
                             }
                         }
                     }
